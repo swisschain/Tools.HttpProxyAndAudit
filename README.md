@@ -7,10 +7,10 @@
 
 # Environment variables
 
-ElasticsearchLogs__NodeUrls__1 = path to elk client api
+`ElasticsearchLogs__NodeUrls__1` = path to elk client api
 
-ConsoleOutputLogLevel = "Error"
+`ConsoleOutputLogLevel` = "Error"
 
-DownstreamScheme: "https",
+`DownstreamScheme`: "https",
 
-DownstreamHost: "apiv2.lykke.com",
+`DownstreamHost`: "apiv2.lykke.com",
