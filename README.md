@@ -15,4 +15,4 @@ docker image: [![docker image](https://img.shields.io/docker/v/swisschains/tools
 
 `DownstreamHost`: "apiv2.lykke.com",
 
-`SESSION_SERVICE_URL`: <url to api of lykke session server>. Optional.
+`SESSION_SERVICE_URL`: Url to api of lykke session server. Optional.
