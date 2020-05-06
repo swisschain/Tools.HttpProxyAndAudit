@@ -7,7 +7,7 @@ docker image: [![docker image](https://img.shields.io/docker/v/swisschains/tools
 
 # Environment variables
 
-`ElasticsearchLogs__NodeUrls__1` = path to elk client api
+`ElasticsearchLogs__NodeUrls__1` = "http://elasticsearch.elk-logs.svc.cluster.local:9200"
 
 `ConsoleOutputLogLevel` = "Error"
 
