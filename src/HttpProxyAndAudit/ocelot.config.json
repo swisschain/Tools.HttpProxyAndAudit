@@ -1,0 +1,29 @@
+{
+
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5000"
+  },
+
+  "ReRoutes": [
+    {
+      "UpstreamPathTemplate": "/{offset}",
+      "UpstreamHttpMethod": [
+        "Post",
+        "Put",
+        "Delete",
+        "Get",
+        "Options"
+      ],
+
+      "DownstreamPathTemplate": "/{offset}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "apiv2.lykke.com",
+          "Port": "443"
+        }
+      ]
+    }
+  ]
+
+}
