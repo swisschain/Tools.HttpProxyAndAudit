@@ -18,3 +18,5 @@ docker image: [![docker image](https://img.shields.io/docker/v/swisschains/tools
 `ElasticsearchLogs__IndexPrefixName`: "apiaudit"
 
 `SESSION_SERVICE_URL`: Url to api of lykke session server. Optional.
+
+`HttpPort`: 5000
