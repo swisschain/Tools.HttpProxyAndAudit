@@ -15,4 +15,6 @@ docker image: [![docker image](https://img.shields.io/docker/v/swisschains/tools
 
 `DownstreamHost`: "apiv2.lykke.com",
 
+`ElasticsearchLogs__IndexPrefixName`: "apiaudit"
+
 `SESSION_SERVICE_URL`: Url to api of lykke session server. Optional.
