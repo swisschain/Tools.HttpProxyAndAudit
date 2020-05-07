@@ -2,13 +2,21 @@
 
 ![Continous integration build and publish](https://github.com/swisschain/Tools.HttpProxyAndAudit/workflows/Continous%20integration%20build%20and%20publish/badge.svg)
 
-![API docker image](https://img.shields.io/docker/v/swisschains/tools-http-proxy-and-audit?sort=semver)
-![Worker docker image](https://img.shields.io/docker/v/swisschains/tools-http-proxy-and-audit-worker?sort=semver)
+docker image: [![docker image](https://img.shields.io/docker/v/swisschains/tools-http-proxy-and-audit?sort=semver)](https://hub.docker.com/repository/docker/swisschains/tools-http-proxy-and-audit)
 
 
 # Environment variables
 
-ElasticsearchLogs__NodeUrls__1 = path to elk client api
-ConsoleOutputLogLevel = "Error
-DownstreamScheme: "https",
-DownstreamHost: "apiv2.lykke.com",
+`ElasticsearchLogs__NodeUrls__1` = "http://elasticsearch.elk-logs.svc.cluster.local:9200"
+
+`ConsoleOutputLogLevel` = "Error"
+
+`DownstreamScheme`: "https",
+
+`DownstreamHost`: "apiv2.lykke.com",
+
+`ElasticsearchLogs__IndexPrefixName`: "apiaudit"
+
+`SESSION_SERVICE_URL`: Url to api of lykke session server. Optional.
+
+`HttpPort`: 5000
