@@ -33,7 +33,7 @@ namespace HttpProxyAndAudit
         {
             app.UseMiddleware<AuditMiddleware>();
             app.UseOcelot().Wait();
-            
+
         }
 
         protected override void RegisterEndpoints(IEndpointRouteBuilder endpoints)
