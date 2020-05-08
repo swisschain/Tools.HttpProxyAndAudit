@@ -61,3 +61,5 @@ node_modules
 /src/**/appsettings.*.json
 **/*sonar*
 /client/**/*.xml
+/src/**/ocelot.*.json
+/src/**/ocelot.json
