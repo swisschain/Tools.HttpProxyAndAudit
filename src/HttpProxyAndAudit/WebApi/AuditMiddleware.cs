@@ -49,7 +49,6 @@ namespace HttpProxyAndAudit.WebApi
                     method = context.Request?.Method;
                     protocol = context.Request?.Protocol;
 
-
                     //if (path.ToString().Contains("elasticsearch") && method == "POST")
                     //{
                     //    if (!path.ToString().StartsWith("/elasticsearch/logs*/_search"))

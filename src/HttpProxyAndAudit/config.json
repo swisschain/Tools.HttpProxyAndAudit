@@ -22,7 +22,10 @@
           "Host": "$DownstreamHost$",
           "Port": "$DownstreamPort$"
         }
-      ]
+      ],
+      "DownstreamHeaderTransform": {
+        "host": "{BaseUrl}"
+      }
     }
   ]
 

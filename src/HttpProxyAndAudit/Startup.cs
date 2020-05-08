@@ -45,6 +45,7 @@ namespace HttpProxyAndAudit
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddSingleton(Config);
             services.AddOcelot();
         }
@@ -55,6 +56,14 @@ namespace HttpProxyAndAudit
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseMiddleware<AuditMiddleware>();
             app.UseOcelot().Wait();
