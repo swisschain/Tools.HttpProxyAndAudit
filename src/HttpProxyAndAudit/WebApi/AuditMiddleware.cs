@@ -120,6 +120,9 @@ namespace HttpProxyAndAudit.WebApi
 
         private async Task<string> GetClientId(string token)
         {
+            if (string.IsNullOrEmpty(token))
+                return "none";
+
             if (!string.IsNullOrEmpty(Program.SessionClientUrl))
             {
                 try
