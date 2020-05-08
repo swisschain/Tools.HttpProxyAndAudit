@@ -1,50 +1,67 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using HttpProxyAndAudit.WebApi;
 using Lykke.Service.Session.Client;
 using Lykke.Service.Session.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Swisschain.Sdk.Server.Common;
+using Swisschain.Sdk.Server.Swagger;
+using Swisschain.Sdk.Server.WebApi.ExceptionsHandling;
 
 namespace HttpProxyAndAudit
 {
-    public sealed class Startup : SwisschainStartup<AppConfig>
+    public class Startup2
     {
-        public Startup(IConfiguration configuration)
-            : base(configuration)
+        public Startup2(IConfiguration configRoot)
         {
+            ConfigRoot = configRoot;
+            Config = ConfigRoot.Get<AppConfig>();
         }
 
-        protected override void ConfigureServicesExt(IServiceCollection services)
+        public IConfiguration ConfigRoot { get; }
+
+        public AppConfig Config { get; }
+
+        public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Config);
             services.AddOcelot();
         }
 
-        protected override void ConfigureExt(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseMiddleware<AuditMiddleware>();
             app.UseOcelot().Wait();
-
         }
 
-        protected override void RegisterEndpoints(IEndpointRouteBuilder endpoints)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-            base.RegisterEndpoints(endpoints);
-        }
-
-        protected override void ConfigureContainerExt(ContainerBuilder builder)
-        {
-            base.ConfigureContainerExt(builder);
-
             if (!string.IsNullOrEmpty(Program.SessionClientUrl))
             {
                 builder.RegisterClientSessionClient(Program.SessionClientUrl, Common.Log.EmptyLog.Instance);
