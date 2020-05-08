@@ -2,11 +2,16 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Common;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Lykke.Service.Session.Client;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 
 namespace HttpProxyAndAudit.WebApi
 {
@@ -25,15 +30,58 @@ namespace HttpProxyAndAudit.WebApi
 
         public async Task Invoke(HttpContext context)
         {
+            var clientId = "";
+
+            var path = "";
+            var method = "";
+            var protocol = "";
+            var token = "";
+
             try
             {
-                var token = GetToken(context);
+                try
+                {
+                    token = GetToken(context);
 
-                var clientId = await GetClientId(token);
+                    clientId = await GetClientId(token);
 
-                var path = context.Request?.Path;
-                var method = context.Request?.Method;
-                var protocol = context.Request?.Protocol;
+                    path = context.Request?.Path;
+                    method = context.Request?.Method;
+                    protocol = context.Request?.Protocol;
+
+
+                    //if (path.ToString().Contains("elasticsearch") && method == "POST")
+                    //{
+                    //    if (!path.ToString().StartsWith("/elasticsearch/logs*/_search"))
+                    //        throw new NotImplementedException();
+
+                    //    var request = (new StreamReader(context.Request.Body)).ReadToEnd();
+
+                    //    var phace =
+                    //        "{ \"match_phrase\": { \"fields.SourceContext\": { \"query\": \"MassTransit\" } } }";
+                    //    var jo = JObject.Parse(request);
+                    //    var p = JObject.Parse(phace);
+                    //    var filter = jo["query"]["bool"]["filter"];
+                    //    var arr = filter as JArray;
+                    //    arr?.Add(p);
+                    //    request = jo.ToString();
+
+
+                    //    Console.WriteLine(request);
+
+                    //    var mem = new MemoryStream();
+                    //    var writer = new StreamWriter(mem);
+                    //    writer.WriteLine(request);
+                    //    writer.Flush();
+                    //    mem.Seek(0, SeekOrigin.Begin);
+                    //    context.Request.Body = mem;
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "ERROR ON PRE_INVOKE: {path}", path);
+                }
+
 
                 var sw = new Stopwatch();
                 sw.Start();
@@ -41,21 +89,30 @@ namespace HttpProxyAndAudit.WebApi
                 await _next(context);
                 sw.Stop();
 
-                var code = context.Response?.StatusCode;
+                try
+                {
+                    var code = context.Response?.StatusCode;
 
-                _logger.LogInformation(
-                    "{message} {Protocol}, {Method}, {Path}, {StatusCode}, {TimeMs}, {TokenHash}, {clientId}",
-                    "Http audit",
-                    protocol,
-                    method,
-                    path,
-                    code,
-                    sw.ElapsedMilliseconds,
-                    token?.GetHashCode(),
-                    clientId);
+
+                    _logger.LogInformation(
+                        "{message} {Protocol}, {Method}, {Path}, {StatusCode}, {TimeMs}, {TokenHash}, {clientId}",
+                        "Http audit",
+                        protocol,
+                        method,
+                        path,
+                        code,
+                        sw.ElapsedMilliseconds,
+                        token?.GetHashCode(),
+                        clientId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "ERROR ON POST_INVOKE: {path}", path);
+                }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "ERROR ON INVOKE: {path}", path);
             }
         }
 

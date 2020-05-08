@@ -67,6 +67,10 @@ namespace HttpProxyAndAudit
             var downstreamHost = Environment.GetEnvironmentVariable("DownstreamHost");
             var downstreamPort = Environment.GetEnvironmentVariable("DownstreamPort");
 
+            Console.WriteLine($"DownstreamScheme: {downstreamScheme}");
+            Console.WriteLine($"downstreamHost: {downstreamHost}");
+            Console.WriteLine($"downstreamPort: {downstreamPort}");
+
             if (string.IsNullOrEmpty(downstreamScheme))
             {
                 throw new Exception("Environment variable DownstreamScheme is empty");
@@ -91,6 +95,10 @@ namespace HttpProxyAndAudit
             var config = reader.ReadToEnd();
             reader.Dispose();
             config = config.Replace("$DownstreamScheme$", downstreamScheme).Replace("$DownstreamHost$", downstreamHost).Replace("$DownstreamPort$", downstreamPort);
+            
+            Console.WriteLine("Config:");
+            Console.WriteLine(config);
+            
             var writer = new StreamWriter(Path.Combine(root, "ocelot.config.json"));
             writer.Write(config);
             writer.Flush();
