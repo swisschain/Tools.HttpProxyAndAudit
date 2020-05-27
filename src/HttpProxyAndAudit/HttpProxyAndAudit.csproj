@@ -23,8 +23,8 @@
   <ItemGroup>
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="4.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Ocelot" Version="14.1.0" />
-    <PackageReference Include="Ocelot.Cache.CacheManager" Version="14.1.0" />
+    <PackageReference Include="Ocelot" Version="16.0.1" />
+    <PackageReference Include="Ocelot.Cache.CacheManager" Version="16.0.1" />
     <PackageReference Include="Lykke.Service.Session.Client" Version="1.20.1" />
   </ItemGroup>
 
