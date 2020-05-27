@@ -62,6 +62,10 @@ namespace HttpProxyAndAudit
                         ApplySettings(context.HostingEnvironment.ContentRootPath);
                         configurationBuilder.AddOcelot(context.HostingEnvironment);
                     });
+                    builder.ConfigureKestrel(options =>
+                    {
+                        options.Listen(IPAddress.Any, 5005, listenOptions => listenOptions.Protocols = HttpProtocols.Http1AndHttp2);
+                    });
                 });
 
         private static void ApplySettings(string root)
@@ -99,8 +103,9 @@ namespace HttpProxyAndAudit
             reader.Dispose();
             config = config.Replace("$DownstreamScheme$", downstreamScheme).Replace("$DownstreamHost$", downstreamHost).Replace("$DownstreamPort$", downstreamPort);
             
-            Console.WriteLine("Config:");
-            Console.WriteLine(config);
+            //Console.WriteLine("Config:");
+            //Console.WriteLine(config);
+            Console.WriteLine("Options - HttpPort (1 and 2): 5005");
             
             var writer = new StreamWriter(Path.Combine(root, "ocelot.config.json"));
             writer.Write(config);
