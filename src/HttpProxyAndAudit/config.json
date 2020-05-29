@@ -12,7 +12,8 @@
         "Put",
         "Delete",
         "Get",
-        "Options"
+        "Options",
+        "Patch"
       ],
 
       "DownstreamPathTemplate": "/{offset}",
