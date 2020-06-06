@@ -104,10 +104,13 @@ namespace HttpProxyAndAudit.WebApi
             }
         }
 
-        private static ConcurrentDictionary<int, (string, string)> _cache = new ConcurrentDictionary<int, (string, string)>(); 
+        private static ConcurrentDictionary<string, (string, string)> _cache = new ConcurrentDictionary<string, (string, string)>(); 
 
         private static (string, string) ParceHFTToken(string token, string clientId)
         {
+            if (string.IsNullOrEmpty(token))
+                return (clientId, string.Empty);
+
             try
             {
                 while (_cache.Count > 1000)
@@ -117,7 +120,7 @@ namespace HttpProxyAndAudit.WebApi
 
                 string walletId = "";
 
-                if (_cache.TryGetValue(token.GetHashCode(), out var item))
+                if (_cache.TryGetValue(token, out var item))
                     return (item.Item1, item.Item2);
 
                 var handler = new JwtSecurityTokenHandler();
@@ -125,13 +128,13 @@ namespace HttpProxyAndAudit.WebApi
 
                 clientId = tdata.Claims.FirstOrDefault(c => c.Type == "client-id")?.Value;
                 walletId = tdata.Claims.FirstOrDefault(c => c.Type == "wallet-id")?.Value;
-                _cache[token.GetHashCode()] = (clientId, walletId);
+                _cache[token] = (clientId, walletId);
                 return (clientId, walletId);
 
             } catch(Exception)
             { }
 
-            _cache[token.GetHashCode()] = (clientId, string.Empty);
+            _cache[token] = (clientId, string.Empty);
 
             return (clientId, string.Empty);
 
@@ -171,6 +174,9 @@ namespace HttpProxyAndAudit.WebApi
         {
 
             var header = context.Request.Headers["Authorization"].ToString();
+
+            if (string.IsNullOrEmpty(header))
+                header = context.Request.Headers["api-key"].ToString();
 
             if (string.IsNullOrEmpty(header))
                 return null;
