@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Common;
+using IdentityModel;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Lykke.Common.Extensions;
 using Lykke.Service.Session.Client;
@@ -87,7 +88,7 @@ namespace HttpProxyAndAudit.WebApi
                         path,
                         code,
                         sw.ElapsedMilliseconds,
-                        token?.GetHashCode(),
+                        token?.ToSha256(),
                         clientId,
                         walletId,
                         ip,

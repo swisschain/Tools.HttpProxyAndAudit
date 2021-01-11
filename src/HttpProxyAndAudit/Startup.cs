@@ -25,6 +25,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Prometheus;
+using Swisschain.Sdk.Metrics.Rest;
 using Swisschain.Sdk.Server.Common;
 using Swisschain.Sdk.Server.Swagger;
 using Swisschain.Sdk.Server.WebApi.ExceptionsHandling;
@@ -56,6 +58,9 @@ namespace HttpProxyAndAudit
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMetricServer();
+            app.UseMiddleware<PrometheusMetricsMiddleware>();
 
 
             app.UseRouting();
